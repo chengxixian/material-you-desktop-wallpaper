@@ -1,0 +1,39 @@
+# GitHub Actions：静态检查 + 测试（Windows）
+#
+# ⚠️ 这个文件故意放在 docs/ 而不是 .github/workflows/：
+#    当前 gh token 的 scopes 是 `gist, read:org, repo`，**没有 `workflow`**，
+#    GitHub 会直接拒绝推送 .github/workflows/ 下的任何文件。
+#
+# 想启用 CI，二选一：
+#   1) 本地执行 `gh auth refresh -h github.com -s workflow` 补上 scope，
+#      然后把这个文件移到 .github/workflows/ci.yml 并推一次；
+#   2) 直接在 GitHub 网页上新建 .github/workflows/ci.yml，把本文内容粘进去。
+#
+# 内容是纯 Flutter 的标准三步：装环境 → analyze → test。
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.5
+
+      - name: 拉依赖
+        run: flutter pub get
+
+      - name: 静态检查
+        run: flutter analyze
+
+      - name: 测试
+        run: flutter test

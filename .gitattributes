@@ -1,0 +1,11 @@
+# 换行统一：仓库内存 LF，检出时按平台默认（Windows 上是 CRLF）
+* text=auto
+
+# 二进制文件不要做任何转换
+*.png binary
+*.ico binary
+*.exe binary
+*.dll binary
+*.lib binary
+*.obj binary
+*.zip binary
